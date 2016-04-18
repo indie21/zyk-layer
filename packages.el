@@ -161,4 +161,18 @@ Each entry is either:
 (add-hook 'find-file-hooks 'large-file-hook)
 
 
+;;----------------------------------------------------------------------------
+;; erlang相关配置
+;;----------------------------------------------------------------------------
+
+
+(add-to-list 'load-path "~/.emacs.d/private/zyk-layer")
+;; (add-to-list 'load-path "~/source/distel/elisp")
+;; (require 'distel)
+;; (distel-setup)
+
+(require 'unicad)
+
+
+
 ;;; packages.el ends here

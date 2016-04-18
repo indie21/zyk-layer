@@ -19,7 +19,7 @@ zyk emacs configure
 To use this contribution add it to your =~/.spacemacs=
 
 #+begin_src emacs-lisp
-  (setq-default dotspacemacs-configuration-layers '(zyk-layer))
+(setq-default dotspacemacs-configuration-layers '(zyk-layer))
 #+end_src
 
 * Key bindings
