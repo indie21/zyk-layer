@@ -173,6 +173,17 @@ Each entry is either:
 
 (require 'unicad)
 
+(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+(setq auto-mode-alist
+      (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+
+
+
+(defun vcity()
+  (interactive)
+  (find-file-existing "~/source/vcity"))
+
+
 
 
 ;;; packages.el ends here
