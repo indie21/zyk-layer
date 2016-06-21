@@ -29,35 +29,22 @@
 
 ;;; Code:
 
+;; (setq zyk-layer-packages
+;;       '(
+;;         ;;distel
+;;         dash
+;;         popup
+;;         flycheck
+;;         ))
+
 (defconst zyk-layer-packages
-  '()
-  "The list of Lisp packages required by the zyk-layer layer.
-
-Each entry is either:
-
-1. A symbol, which is interpreted as a package to be installed, or
-
-2. A list of the form (PACKAGE KEYS...), where PACKAGE is the
-    name of the package to be installed or loaded, and KEYS are
-    any number of keyword-value-pairs.
-
-    The following keys are accepted:
-
-    - :excluded (t or nil): Prevent the package from being loaded
-      if value is non-nil
-
-    - :location: Specify a custom installation location.
-      The following values are legal:
-
-      - The symbol `elpa' (default) means PACKAGE will be
-        installed using the Emacs package manager.
-
-      - The symbol `local' directs Spacemacs to load the file at
-        `./local/PACKAGE/PACKAGE.el'
-
-      - A list beginning with the symbol `recipe' is a melpa
-        recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
-
+  '(
+    csharp-mode
+    dash
+    popup
+    flycheck
+    omnisharp
+    ))
 
 
 ;;----------------------------------------------------------------------------
@@ -171,19 +158,98 @@ Each entry is either:
 ;; (require 'distel)
 ;; (distel-setup)
 
-(require 'unicad)
+;;(require 'unicad)
 
-(autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
-(setq auto-mode-alist
-      (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+;; (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
+;; (setq auto-mode-alist
+;;       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 
 
 
-(defun vcity()
+;; (setq auto-mode-alist
+;;       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
+
+(defun my-csharp-mode-fn ()
+  "function that runs when csharp-mode is initialized for a buffer."
+  ;;(setq default-tab-width 4)
+  (linum-mode)
+  (flycheck-mode)
+  (eldoc-mode)
+  )
+
+
+(add-hook  'csharp-mode-hook 'my-csharp-mode-fn t)
+
+
+(defun my-c-mode-common-hook ()
+  (setq c-basic-offset 4)
+  (c-set-offset 'substatement-open 0))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;; lua mode hook
+(defun my-lua-mode-hook ()
+  (setq lua-indent-level 4)
+  )
+(add-hook 'lua-mode-hook 'my-lua-mode-hook)
+
+
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+
+;; (add-to-list 'load-path "~/source/dash.el")
+;; (require 'dash)
+
+
+;; (add-to-list 'load-path "~/source/popup-el")
+;; (require 'popup)
+
+
+;; (add-to-list 'load-path "~/source/flycheck")
+;; (require 'flycheck)
+
+
+;; (add-to-list 'load-path "~/source/omnisharp-emacs")
+(require 'omnisharp)
+(add-hook 'csharp-mode-hook 'omnisharp-mode)
+
+(eval-after-load 'company
+  '(add-to-list 'company-backends 'company-omnisharp))
+
+(setq flycheck-idle-change-delay 2)
+
+;; (setq omnisharp-server-executable-path "/Users/zhuoyikang/source/omnisharp-server/OmniSharp/bin/Debug/OmniSharp.exe")
+
+;; (define-key omnisharp-mode-map (kbd "<C-tab>") 'omnisharp-auto-complete)
+;; (define-key omnisharp-mode-map "." 'omnisharp-add-dot-and-auto-complete)
+;;
+;;  find -name "*.[(cs)(lua)]" -exec etags -a {} ;
+
+
+(defun open(dir)
+  (interactive "swhat dir you want to open ?")
+  (find-file-existing (cond
+                       ((equal dir "vcity") "~/source/vcity/")
+                       ((equal dir "slash")  "~/source/slash/")
+                       ((equal dir "tank")  "/Users/Shared/Unity/Tank.io/Assets/Scripts" )
+                       ((equal dir "lisp")  "~/.emacs.d/private/zyk-layer/packages.el")
+                       ))
+  )
+
+(defun open-vcity()
   (interactive)
-  (find-file-existing "~/source/vcity"))
-
-
+  (progn
+    (setq beam_sync_list "/Users/zhuoyikang/Source/vcity/")
+    (and (clrhash beamHash) (load_beam_hash))
+    (find-file-existing "~/source/vcity/")
+    )
+  )
 
 
 ;;; packages.el ends here
