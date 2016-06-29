@@ -44,7 +44,19 @@
     popup
     flycheck
     omnisharp
+    ;; thrift
+    ;; thrift
+    ;; protobuf-mode
     ))
+
+
+(defun zyk-layer-packages/init-thrift ()
+  (use-package thrift
+    :defer t
+    :init (put 'thrift-indent-level 'safe-local-variable #'integerp)
+    ;; Fake inheritance from prog mode
+    :config (add-hook 'thrift-mode-hook (lambda () (run-hooks 'prog-mode-hook)))))
+
 
 
 ;;----------------------------------------------------------------------------
@@ -237,10 +249,11 @@
   (find-file-existing (cond
                        ((equal dir "vcity") "~/source/vcity/")
                        ((equal dir "slash")  "~/source/slash/")
+                       ((equal dir "source")  "~/source/")
+                       ((equal dir "note")  "~/note/")
                        ((equal dir "tank")  "/Users/Shared/Unity/Tank.io/Assets/Scripts" )
                        ((equal dir "lisp")  "~/.emacs.d/private/zyk-layer/packages.el")
-                       ))
-  )
+                       )))
 
 (defun open-vcity()
   (interactive)
@@ -251,5 +264,17 @@
     )
   )
 
+(defun my-org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
+
+;; (add-to-list 'load-path "~/source/o-blog/lisp")
+;; (require 'o-blog)
+
+
+;;(require 'thrift-mode)
+
+;;(package-install 'thrift)
+;;(require 'protobuf-mode)
 
 ;;; packages.el ends here
